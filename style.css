@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Muli:400;700&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Muli';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    width: 100%;
+    margin-inline: auto;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    overflow: hidden;
+
+}
+
+.calculator-display{
+    height: 120px;
+    width: 100%;
+    background-color: #000;
+    font-size: 32px;
+    color: #fff;
+    padding: 8px 10px;
+    text-align: end;
+    word-break: break-all;
+}
+
+.calculator-display::-webkit-scrollbar{
+    -webkit-appearance: none;
+}
+
+button{
+    display: inline-block;
+    width: 33.33%;
+    height: 70px;
+    cursor: pointer;
+    border: 1px solid #aaa;
+    font-size: 28px;
+}
+
+.numbers, .operators{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    flex: 1;
+}
+
+.numbers{
+    border: none;
+}
+
+.number:active{
+    background-color: green;
+}
+
+.operator, .equals{
+    background-color: orange;
+    font-size: 28px;
+}
+
+.operator:active, .equals:active{
+    background-color: orangered;
+}
+
+.clear, .zero{
+    width: 100%;
+}
+
+.clear{
+    background-color: lightblue;
+}
+
+.clear:active{
+    background-color: red;
+}
+
+.equals{
+    flex: 1;
+}
+
+
