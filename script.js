@@ -4,55 +4,68 @@ const clearEl = document.querySelector(".clear");
 const displayEl = document.querySelector(".calculator-display");
 const equalBtn = document.querySelector(".equals");
 
-displayEl.innerHTML = "";
-
 let acc = 0;
 let input = 0;
 let state = 0;
-let previousoperator;
-
-clearEl.addEventListener("click", () => {
-  displayEl.innerHTML = "";
-  acc = 0;
-  console.log("Display cleared");
-});
+let readingState = 0;
+let previousoperator = "";
 
 numberEls.forEach((num) => {
   num.addEventListener("click", () => {
-    const numText = num.innerHTML;
-    console.log(`The number clicked is: ${numText}`);
-    displayEl.innerText += `${numText}`;
+    if (readingState === 0) {
+      const numText = displayNum(num.innerHTML);
+      console.log(`The number clicked is: ${numText}`);
+      displayEl.innerText += `${numText}`;
+    } else {
+      displayEl.innerHTML = num.innerHTML;
+      readingState = 0;
+    }
   });
 });
 
 operatorEl.forEach((operator) => {
   operator.addEventListener("click", () => {
-    opr = operator.innerHTML;
-    input = displayEl.innerHTML;
+    const opr = operator.innerHTML;
+    input = displayNum(displayEl.innerHTML);
 
     if (state === 0) {
-      input = displayEl.innerHTML;
-      opr = operator.innerHTML;
+      acc = input;
+      previousoperator = opr;
       displayEl.innerHTML = "";
+      state = 1;
     } else {
-      switch (opr) {
+      switch (previousoperator) {
         case "+":
           acc += input;
           break;
         case "-":
-          acc += input;
+          acc -= input;
+          break;
+        case "*":
+          acc *= input;
+          break;
+        case "/":
+          acc /= input;
           break;
       }
     }
-
-    displayEl.innerHTML = acc.toString()
-    previousoperator = operator
-    
+    displayEl.innerHTML = acc.toString();
+    previousoperator = opr;
+    readingState = 1;
   });
-
 });
 
 equalBtn.addEventListener("click", () => {});
+
+clearEl.addEventListener("click", () => {
+  displayEl.innerHTML = "";
+  state = 0;
+  acc = 0;
+  input = 0;
+  previousoperator = "";
+  readingState = 0;
+  console.log("Display cleared");
+});
 
 function displayNum(val) {
   let num = 0;
@@ -76,33 +89,33 @@ function charToInt(cval) {
   if (cval === "9") return 9;
 }
 
-function add(a, b) {
-  acc = a + b;
+// function add(a, b) {
+//   acc = a + b;
 
-  // console.log(acc)
-  displayEl.innerHTML = `${acc}`;
-}
+//   // console.log(acc)
+//   displayEl.innerHTML = `${acc}`;
+// }
 
-function subtract(a, b) {
-  let acc = a - b;
+// function subtract(a, b) {
+//   let acc = a - b;
 
-  // console.log(acc)
-  displayEl.innerHTML = `${acc}`;
-}
+//   // console.log(acc)
+//   displayEl.innerHTML = `${acc}`;
+// }
 
-function multiply(a, b) {
-  let acc = a * b;
+// function multiply(a, b) {
+//   let acc = a * b;
 
-  // console.log(acc)
-  displayEl.innerHTML = `${acc}`;
-}
+//   // console.log(acc)
+//   displayEl.innerHTML = `${acc}`;
+// }
 
-function division(a, b) {
-  let acc = a / b;
+// function division(a, b) {
+//   let acc = a / b;
 
-  // console.log(acc)
-  displayEl.innerHTML = `${acc}`;
-}
+//   // console.log(acc)
+//   displayEl.innerHTML = `${acc}`;
+// }
 
 // add(2,6)
 // subtract(8,3)
