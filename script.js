@@ -9,6 +9,8 @@ let input = 0;
 let state = 0;
 let readingState = 0;
 let previousoperator = "";
+let arr = []
+const operatorSymb = ['+', '-', 'X', '/']
 
 numberEls.forEach((num) => {
   num.addEventListener("click", () => {
@@ -16,10 +18,14 @@ numberEls.forEach((num) => {
       const numText = displayNum(num.innerHTML);
       console.log(`The number clicked is: ${numText}`);
       displayEl.innerText += `${numText}`;
+      arr.push(numText)
     } else {
       displayEl.innerHTML = num.innerHTML;
+      arr.push(num.innerHTML)
       readingState = 0;
     }
+
+    console.log(arr)
   });
 });
 
@@ -27,6 +33,9 @@ operatorEl.forEach((operator) => {
   operator.addEventListener("click", () => {
     const opr = operator.innerHTML;
     input = displayNum(displayEl.innerHTML);
+
+    arr.push(opr)
+
 
     if (state === 0) {
       acc = input;
@@ -41,7 +50,7 @@ operatorEl.forEach((operator) => {
         case "-":
           acc -= input;
           break;
-        case "*":
+        case "X":
           acc *= input;
           break;
         case "/":
@@ -52,10 +61,31 @@ operatorEl.forEach((operator) => {
     displayEl.innerHTML = acc.toString();
     previousoperator = opr;
     readingState = 1;
+
+    console.log(arr)
   });
 });
 
-equalBtn.addEventListener("click", () => {});
+equalBtn.addEventListener("click", () => {
+  input = displayNum(displayEl.innerHTML);
+  console.log(input);
+  switch (previousoperator) {
+    case "+":
+      acc += input;
+      break;
+    case "-":
+      acc -= input;
+      break;
+    case "X":
+      acc *= input;
+      break;
+    case "/":
+      acc /= input;
+      break;
+  }
+  displayEl.innerHTML = acc.toString();
+  state = 0;
+});
 
 clearEl.addEventListener("click", () => {
   displayEl.innerHTML = "";
@@ -64,6 +94,7 @@ clearEl.addEventListener("click", () => {
   input = 0;
   previousoperator = "";
   readingState = 0;
+  arr = []
   console.log("Display cleared");
 });
 
