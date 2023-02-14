@@ -16,55 +16,60 @@ numberEls.forEach((num) => {
   num.addEventListener("click", () => {
     if (readingState === 0) {
       const numText = displayNum(num.innerHTML);
-      console.log(`The number clicked is: ${numText}`);
+      // console.log(`The number clicked is: ${numText}`);
       displayEl.innerText += `${numText}`;
       arr.push(numText);
     } else {
-      displayEl.innerHTML = num.innerHTML;
+      displayEl.innerHTML = displayNum(num.innerHTML);
       arr.push(num.innerHTML);
       readingState = 0;
     }
 
-    console.log(arr);
+    // console.log(arr);
   });
 });
 
 operatorEl.forEach((operator) => {
   operator.addEventListener("click", () => {
-    const opr = operator.innerHTML;
-    input = displayNum(displayEl.innerHTML);
+    let opr = operator.innerHTML;
 
-    let check = false;
-
+    let input = displayNum(displayEl.innerHTML);
     arr.push(opr);
-    console.log(arr);
 
-    if (operatorSymb.includes(arr[arr.length - 1]) && operatorSymb.includes(arr[arr.length - 2])) {
-      check = true
+    if (
+      operatorSymb.includes(arr[arr.length - 1]) &&
+      operatorSymb.includes(arr[arr.length - 2])
+    ) {
+      opr = arr[arr.length - 1];
+      if (opr !== "X" && opr !== "/") {
+        input = 0;
+      } else {
+        input = 1;
+      }
     }
 
-    if(!check){
-      
-      if (state === 0) {
-        acc = input;
-        previousoperator = opr;
-        displayEl.innerHTML = "";
-        state = 1;
-      } else {
-        switch (previousoperator) {
-          case "+":
-            acc += input;
-            break;
-          case "-":
-            acc -= input;
-            break;
-          case "X":
-            acc *= input;
-            break;
-          case "/":
-            acc /= input;
-            break;
-        }
+    if (state === 0) {
+      acc = input;
+      previousoperator = opr;
+      displayEl.innerHTML = "";
+      state = 1;
+    } else {
+      switch (previousoperator) {
+        case "+":
+          acc += input;
+          break;
+        case "-":
+          acc -= input;
+
+          break;
+        case "X":
+          acc *= input;
+
+          break;
+        case "/":
+          acc /= input;
+
+          break;
       }
       displayEl.innerHTML = acc.toString();
       previousoperator = opr;
@@ -74,24 +79,30 @@ operatorEl.forEach((operator) => {
 });
 
 equalBtn.addEventListener("click", () => {
-  input = displayNum(displayEl.innerHTML);
-  console.log(input);
-  switch (previousoperator) {
-    case "+":
-      acc += input;
-      break;
-    case "-":
-      acc -= input;
-      break;
-    case "X":
-      acc *= input;
-      break;
-    case "/":
-      acc /= input;
-      break;
+  arr.push(equalBtn.innerHTML);
+  if (!(arr[arr.length - 1] === "=" && arr[arr.length - 2] === "=")) {
+    input = displayNum(displayEl.innerHTML);
+    switch (previousoperator) {
+      case "+":
+        acc += input;
+        break;
+      case "-":
+        acc -= input;
+        break;
+      case "X":
+        acc *= input;
+        break;
+      case "/":
+        acc /= input;
+        break;
+    }
+    if(arr.length === 2 && typeof arr[0] === 'number'){
+      displayEl.innerHTML = arr[0].toString()
+    }else{
+      displayEl.innerHTML = acc.toString();
+      state = 0;
+    }
   }
-  displayEl.innerHTML = acc.toString();
-  state = 0;
 });
 
 clearEl.addEventListener("click", () => {
@@ -102,16 +113,23 @@ clearEl.addEventListener("click", () => {
   previousoperator = "";
   readingState = 0;
   arr = [];
-  console.log("Display cleared");
+  // console.log("Display cleared");
 });
 
 function displayNum(val) {
   let num = 0;
 
   for (let i of val) {
-    num = num * 10 + charToInt(i);
+    if (i !== "-") {
+      num = num * 10 + charToInt(i);
+    }
   }
-  return num;
+
+  if (val[0] === "-") {
+    return -1 * num;
+  } else {
+    return num;
+  }
 }
 
 function charToInt(cval) {
